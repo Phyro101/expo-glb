@@ -1,17 +1,28 @@
 const Avatar = require('./assets/models/AVATAR.glb');
 
-import { Suspense, useRef } from 'react';
+import { Suspense, useRef, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Canvas, } from '@react-three/fiber/native';
-import { useGLTF, Environment } from '@react-three/drei/native'
+import { useGLTF, useAnimations, Environment } from '@react-three/drei/native'
 import useControls from 'r3f-native-orbitcontrols';
 
 
 function Model() {
   const group = useRef();
-  const { materials, scene, nodes } = useGLTF(Avatar, true);
-  console.log(materials)
+  const { materials, animations, nodes } = useGLTF(Avatar, true);
+  const { actions, mixer } = useAnimations(animations, group)
+  // console.log(materials)
+
+  // Play animation
+  useEffect(() => {
+    const anims = ['BODY_1_IDLE', 'FACE_1_IDLE', 'LASH_2', 'LASH_1'];
+    anims.forEach(anim => {
+      const animation = actions[anim];
+      animation?.play();
+      animation?.setEffectiveTimeScale(1);
+    });
+  }, [mixer]);
 
   return (
     <group ref={group} dispose={null}>
