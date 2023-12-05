@@ -1,6 +1,6 @@
 const Avatar = require('./assets/models/AVATAR.glb');
 
-import { Suspense, useRef, useEffect } from 'react';
+import { Suspense, useRef, useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Canvas, } from '@react-three/fiber/native';
@@ -12,7 +12,7 @@ function Model() {
   const group = useRef();
   const { materials, animations, nodes } = useGLTF(Avatar, true);
   const { actions, mixer } = useAnimations(animations, group)
-  // console.log(materials)
+  console.log(materials)
 
   // Play animation
   useEffect(() => {
@@ -103,8 +103,16 @@ function Model() {
   )
 }
 
+function HandleLoad({ setIsLoading }) {
+  useEffect(() => {
+    setIsLoading(true)
+    return () => setIsLoading(false)
+  }, [])
+}
+
 export default function App() {
   const [OrbitControls, events] = useControls();
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleCreated = (state) => {
     const _gl = state.gl.getContext();
@@ -131,11 +139,16 @@ export default function App() {
           <OrbitControls />
           <ambientLight />
           <pointLight position={[10, 10, 10]} />
-          <Suspense fallback={null}>
+          <Suspense fallback={<HandleLoad setIsLoading={setIsLoading} />}>
             <Model />
             <Environment preset='sunset' />
           </Suspense>
         </Canvas>
+        {isLoading && (
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Loading...</Text>
+          </View>
+        )}
 
       </View>
 
