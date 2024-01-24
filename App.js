@@ -1,18 +1,17 @@
-const Avatar = require('./assets/models/AVATAR.glb');
+const Duck = require('./assets/models/Duck.glb');
 
 import { Suspense, useRef, useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Canvas, } from '@react-three/fiber/native';
-import { useGLTF, useAnimations, Environment } from '@react-three/drei/native'
+import { useGLTF, useAnimations, Environment, OrthographicCamera } from '@react-three/drei/native'
 import useControls from 'r3f-native-orbitcontrols';
 
 
 function Model() {
   const group = useRef();
-  const { materials, animations, nodes } = useGLTF(Avatar, true);
+  const { materials, animations, nodes } = useGLTF(Duck, true);
   const { actions, mixer } = useAnimations(animations, group)
-  console.log(materials)
 
   // Play animation
   useEffect(() => {
@@ -25,78 +24,21 @@ function Model() {
   }, [mixer]);
 
   return (
-    <group ref={group} dispose={null}>
-      <group name="Scene">
-        <group name="ARMATURE">
-          <skinnedMesh
-            name="BASE_HEAD_1"
-            geometry={nodes.BASE_HEAD_1.geometry}
-            material={materials.BASE_HEAD_1}
-            skeleton={nodes.BASE_HEAD_1.skeleton}
-            morphTargetDictionary={nodes.BASE_HEAD_1.morphTargetDictionary}
-            morphTargetInfluences={nodes.BASE_HEAD_1.morphTargetInfluences}
-          />
-          <skinnedMesh
-            name="BASE_BODY"
-            geometry={nodes.BASE_BODY.geometry}
-            material={materials.BASE_BODY}
-            skeleton={nodes.BASE_BODY.skeleton}
-          />
-          <skinnedMesh
-            name="EYES_1_L"
-            geometry={nodes.EYES_1_L.geometry}
-            material={materials.EYES_1}
-            skeleton={nodes.EYES_1_L.skeleton}
-            morphTargetDictionary={nodes.EYES_1_L.morphTargetDictionary}
-            morphTargetInfluences={nodes.EYES_1_L.morphTargetInfluences}
-          />
-          <skinnedMesh
-            name="EYES_1_R"
-            geometry={nodes.EYES_1_R.geometry}
-            material={materials.EYES_1}
-            skeleton={nodes.EYES_1_R.skeleton}
-            morphTargetDictionary={nodes.EYES_1_R.morphTargetDictionary}
-            morphTargetInfluences={nodes.EYES_1_R.morphTargetInfluences}
-          />
-          <skinnedMesh
-            name="HAIR_1"
-            geometry={nodes.HAIR_1.geometry}
-            material={materials.HAIR_1}
-            skeleton={nodes.HAIR_1.skeleton}
-            morphTargetDictionary={nodes.HAIR_1.morphTargetDictionary}
-            morphTargetInfluences={nodes.HAIR_1.morphTargetInfluences}
-          />
-          <group name="SHOES_1">
-            <skinnedMesh
-              name="SHOES_1_1"
-              geometry={nodes.SHOES_1_1.geometry}
-              material={materials.BASE_SHOES}
-              skeleton={nodes.SHOES_1_1.skeleton}
-            />
-            <skinnedMesh
-              name="SHOES_1_2"
-              geometry={nodes.SHOES_1_2.geometry}
-              material={materials.DARK_SHOES}
-              skeleton={nodes.SHOES_1_2.skeleton}
-            />
-          </group>
-          <primitive object={nodes.mixamorigHips} />
-          <primitive object={nodes.Ctrl_Master} />
-          <primitive object={nodes.Ctrl_ArmPole_IK_Left} />
-          <primitive object={nodes.Ctrl_Hand_IK_Left} />
-          <primitive object={nodes.Ctrl_ArmPole_IK_Right} />
-          <primitive object={nodes.Ctrl_Hand_IK_Right} />
-          <primitive object={nodes.Ctrl_Foot_IK_Left} />
-          <primitive object={nodes.Ctrl_LegPole_IK_Left} />
-          <primitive object={nodes.Ctrl_Foot_IK_Right} />
-          <primitive object={nodes.Ctrl_LegPole_IK_Right} />
-          <primitive object={nodes["MCH-eyes_parent"]} />
-        </group>
-        <skinnedMesh
-          name="CLOTHES_1"
-          geometry={nodes.CLOTHES_1.geometry}
-          material={materials.CLOTHES_1}
-          skeleton={nodes.CLOTHES_1.skeleton}
+    <group {...props} dispose={null}>
+      <group scale={0.01}>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.LOD3spShape.geometry}
+          material={materials["blinn3-fx"]}
+        />
+        <PerspectiveCamera
+          makeDefault={false}
+          far={10000}
+          near={1}
+          fov={37.849}
+          position={[400.113, 463.264, -431.078]}
+          rotation={[-2.314, 0.566, 2.614]}
         />
       </group>
     </group>
@@ -132,7 +74,15 @@ export default function App() {
         <Text>Meong</Text>
         <Canvas
           gl={{ antialias: true, pixelRatio: 2, alpha: true }}
-          camera={{ position: [0, 0, 5] }}
+          camera={{
+            zoom: 250,
+            position: [2, 0, 2],
+            fov: 60,
+            near: 1,
+            far: 100,
+            castShadow: true,
+          }}
+          orthographic={true}
           style={styles.canvas}
           onCreated={handleCreated}
         >

@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "expo-three-glb",
-    "slug": "ana-glb",
+    "slug": "expo-glb",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -30,7 +30,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "9700fcbf-3113-4d48-a29c-d170414095a9"
+        "projectId": "5f5ceec0-c40b-4bda-865c-3533e68c11e6"
       }
     },
     "owner": "wildanzr"
