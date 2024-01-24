@@ -10,21 +10,10 @@ import useControls from 'r3f-native-orbitcontrols';
 
 function Model() {
   const group = useRef();
-  const { materials, animations, nodes } = useGLTF(Duck, true);
-  const { actions, mixer } = useAnimations(animations, group)
-
-  // Play animation
-  useEffect(() => {
-    const anims = ['BODY_1_IDLE', 'FACE_1_IDLE', 'LASH_2', 'LASH_1'];
-    anims.forEach(anim => {
-      const animation = actions[anim];
-      animation?.play();
-      animation?.setEffectiveTimeScale(1);
-    });
-  }, [mixer]);
+  const { materials, nodes } = useGLTF(Duck, true);
 
   return (
-    <group {...props} dispose={null}>
+    <group ref={group} dispose={null}>
       <group scale={0.01}>
         <mesh
           castShadow
@@ -32,13 +21,13 @@ function Model() {
           geometry={nodes.LOD3spShape.geometry}
           material={materials["blinn3-fx"]}
         />
-        <PerspectiveCamera
+        <OrthographicCamera
           makeDefault={false}
-          far={10000}
-          near={1}
-          fov={37.849}
-          position={[400.113, 463.264, -431.078]}
-          rotation={[-2.314, 0.566, 2.614]}
+        // far={1000}
+        // near={1}
+        // fov={37.849}
+        // position={[400.113, 500, -431.078]}
+        // rotation={[-2.314, 0.566, 2.614]}
         />
       </group>
     </group>
