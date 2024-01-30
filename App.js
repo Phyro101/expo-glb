@@ -1,12 +1,12 @@
-const Duck = require("./assets/models/Duck.glb");
-
-import { Suspense, useRef, useEffect, useState } from "react";
+import React, { Suspense, useRef, useEffect, useState } from "react";
 import { LogBox, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Canvas } from "@react-three/fiber/native";
 import { useGLTF, Environment } from "@react-three/drei/native";
 import useControls from "r3f-native-orbitcontrols";
 import Slider from "react-native-a11y-slider";
+
+import Duck from "./assets/models/Duck.glb";
 
 LogBox.ignoreAllLogs(true);
 
